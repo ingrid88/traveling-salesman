@@ -4,7 +4,9 @@ import itertools
 import webbrowser
 import pdb
 from datetime import datetime
-# christofedis
+
+# TODO: Implement christofedis
+
 # Data from : http://www.uscampgrounds.info/takeit.html
 az_campgrounds = {
     'Agave Gulch Military': (-110.861, 32.18), # 0
@@ -27,6 +29,8 @@ az_campgrounds = {
     # 'Blue Ridge': (-111.201, 34.591)
 }
 
+# all pickups must happen before corresponding dropoff
+#  eg 7 before 1
 pickup_dropoffs = [(0,3),(7,1),(4,10),(2,5),(9,6)]
 
 def campground_distances(az_campgrounds):
@@ -103,6 +107,14 @@ def compute_approximate_path(matrix, start):
     return [min_path, min_distance]
 
 
+def compute_ordered_brute_path(matrix, start):
+    pass
+
+
+def compute_ordered_approximate_path(matrix, start):
+    pass
+
+
 def compute_brute_path(matrix, start):
     # pdb.set_trace()
     # compute all possible paths
@@ -164,3 +176,13 @@ print "Brute Force solution:"
 print min_path
 print min_distance
 show_path(min_path)
+
+
+###############################
+# Pick-up Drop-off            #
+###############################
+
+
+
+
+
