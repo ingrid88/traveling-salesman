@@ -3,29 +3,31 @@ import numpy as np
 import itertools
 import webbrowser
 import pdb
+from datetime import datetime
 # christofedis
 # Data from : http://www.uscampgrounds.info/takeit.html
 az_campgrounds = {
-    'Agave Gulch Military': (-110.861, 32.18),
-    'Alamo Lake State Park': (-113.579, 34.231),
-    'Alpine Divide': (-109.153, 33.895),
-    'Alto Pit': (-112.561, 34.589),
+    'Agave Gulch Military': (-110.861, 32.18), # 0
+    'Alamo Lake State Park': (-113.579, 34.231), # 1
+    'Alpine Divide': (-109.153, 33.895), # 2
+    'Alto Pit': (-112.561, 34.589), # 3
     # 'Apache Flats Military -  Fort Huachuca': (-110.366, 31.56),
-    # 'Arcadia': (-109.819, 32.649),
-    # 'Ashurst Lake': (-111.409, 35.018),
+    'Arcadia': (-109.819, 32.649), # 4
+    'Ashurst Lake': (-111.409, 35.018), # 5
     # 'Aspen': (-110.946, 34.327),
-    # 'Aspen': (-109.314, 33.807),
-    # 'Bachelors Cove': (-111.204, 33.714),
-    # 'Bartlett Flat': (-111.639, 33.84),
+    'Aspen': (-109.314, 33.807), # 6
+    'Bachelors Cove': (-111.204, 33.714), # 7
+    'Bartlett Flat': (-111.639, 33.84), # 8
     # 'Bathtub': (-109.307, 31.781),
     # 'Beaver Creek': (-111.714, 34.67),
-    # 'Benny Creek': (-109.449, 34.044),
-    'Bermuda Flat': (-111.226, 33.746)
-    # 'Black Canyon Rim': (-110.743, 34.305),
+    'Benny Creek': (-109.449, 34.044), # 9
+    'Bermuda Flat': (-111.226, 33.746) # 10
+    # 'Black Canyon Rim': (-110.743, 34.305)
     # 'Black Jack': (-109.08, 33.057),
     # 'Blue Ridge': (-111.201, 34.591)
 }
 
+pickup_dropoffs = [(0,3),(7,1),(4,10),(2,5),(9,6)]
 
 def campground_distances(az_campgrounds):
     l = len(az_campgrounds.keys())
@@ -132,11 +134,27 @@ def show_path(min_path):
             + str(az_campgrounds[az_campgrounds.keys()[loc]][0]) + "/"
     webbrowser.open_new_tab(url)
 
-# min_path, min_distance = compute_brute_path()
-# start = 0
-# matrix = campground_distances(az_campgrounds)
-# min_path, min_distance = compute_approximate_path(matrix, start)
-# print "solution"
-# print min_path
-# print min_distance
-# show_path(min_path)
+##############################
+start = 0
+matrix = campground_distances(az_campgrounds)
+
+start_match = datetime.now()
+min_path, min_distance = compute_approximate_path(matrix, start)
+time = datetime.now() - start_match
+print "Approximate solution solved in {time} s".format(time=time)
+
+print "Approximate solution:"
+print min_path
+print min_distance
+show_path(min_path)
+
+##############################
+start_match = datetime.now()
+min_path, min_distance = compute_brute_path(matrix, start)
+time = datetime.now() - start_match
+print "Brute Force solution solved in {time} s".format(time=time)
+
+print "Brute Force solution:"
+print min_path
+print min_distance
+show_path(min_path)
