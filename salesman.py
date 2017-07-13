@@ -42,15 +42,15 @@ def campground_distances(az_campgrounds):
     return d
 
 
-def all_orders_of_places(places):
+def all_orders_of_places(matrix):
     # l = len(places)
     # pdb.set_trace()
     # orders = perms(l, l)
     # values = range(len(places))
     # d = dict(zip(values, places))
     # return [[d[x] for x in order] for order in orders]
-
-    return itertools.permutations(places, len(places))
+    m_shape = len(matrix)
+    return itertools.permutations(range(m_shape), m_shape)
 
 # storage = []
 def perms(n, m, ls=[]):
@@ -68,26 +68,20 @@ def approximate_distance(start, matrix):
     # choose the closest of all places
     min_path = [start]
     location = start
-    v = len(matrix)
     matrix_copy = np.copy(matrix)
-    print matrix_copy
-    values = range(v)
     min_distance = 0
-    for i in values[0:-1]:
+    for i in range(len(matrix))[0:-1]:
         # pdb.set_trace()
-        row = matrix_copy[location][values]
+        row = matrix_copy[location][range(len(matrix))]
         previous_location = location
         # 1. for every available distance, choose the shortest one
         location = np.nanargmin(row)
         # 2. remove the used connection index 
-        for j in values:
+        for j in range(len(matrix)):
             matrix_copy[j][previous_location] = np.nan
         # 3. append location to path
-        print matrix_copy
-        print location
         min_path.append(location)
         min_distance += matrix[previous_location][location]
-        print min_path
     min_path.append(start)
     min_distance += matrix[location][start]
 
@@ -95,23 +89,26 @@ def approximate_distance(start, matrix):
 
 
 def compute_distance(path, matrix):
-    places = az_campgrounds.keys()
-    values = range(len(places))
-    d = dict(zip(places, values))
-    s = 0
+    values = range(len(matrix))
+    min_distance = 0
     for i, location in enumerate(path[0:-1]):
-        s += matrix[d[location]][d[path[i+1]]]
-    return s
+        min_distance += matrix[path[i]][path[i+1]]
+    return min_distance
 
 
 def compute_approximate_path(matrix, start):
     min_path, min_distance = approximate_distance(start, matrix)
-    # min_path = [az_campgrounds.keys()[pos] for pos in min_path]
     return [min_path, min_distance]
 
 
 def compute_brute_path(matrix, start):
-    paths = all_orders_of_places(az_campgrounds)
+    # pdb.set_trace()
+    # compute all possible paths
+    paths = all_orders_of_places(matrix)
+
+    # get all paths that start with start
+    paths = [path for path in paths if path[0] == start]
+    # pdb.set_trace()     
     min_distance = 100000
     min_path = []
 
