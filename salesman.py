@@ -134,6 +134,9 @@ def show_path(min_path):
             + str(az_campgrounds[az_campgrounds.keys()[loc]][0]) + "/"
     webbrowser.open_new_tab(url)
 
+
+##############################
+#  APPROXIMATE PATH          #
 ##############################
 start = 0
 matrix = campground_distances(az_campgrounds)
@@ -148,6 +151,9 @@ print min_path
 print min_distance
 show_path(min_path)
 
+
+##############################
+# BRUTE PATH                 #
 ##############################
 start_match = datetime.now()
 min_path, min_distance = compute_brute_path(matrix, start)
