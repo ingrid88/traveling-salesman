@@ -68,23 +68,30 @@ def approximate_distance(start, matrix):
     # choose the closest of all places
     min_path = [start]
     location = start
-    s = 0
     v = len(matrix)
     matrix_copy = np.copy(matrix)
+    print matrix_copy
     values = range(v)
-    pdb.set_trace()
-    for i in values:
+    min_distance = 0
+    for i in values[0:-1]:
+        # pdb.set_trace()
         row = matrix_copy[location][values]
+        previous_location = location
         # 1. for every available distance, choose the shortest one
         location = np.nanargmin(row)
         # 2. remove the used connection index 
-        for row in matrix_copy:
-            matrix_copy[row][location] = np.nan
+        for j in values:
+            matrix_copy[j][previous_location] = np.nan
         # 3. append location to path
+        print matrix_copy
+        print location
         min_path.append(location)
-        s += min(matrix[location])
-    min_path.append(0)
-    return [min_path, s]
+        min_distance += matrix[previous_location][location]
+        print min_path
+    min_path.append(start)
+    min_distance += matrix[location][start]
+
+    return [min_path, min_distance]
 
 
 def compute_distance(path, matrix):
@@ -122,17 +129,17 @@ def compute_brute_path(matrix, start):
 def show_path(min_path):
     # Open URL in a new tab, if a browser window is already open.
     url = 'https://www.google.com/maps/dir/'
-    pdb.set_trace()
+    # pdb.set_trace()
     for loc in min_path:
         url += str(az_campgrounds[az_campgrounds.keys()[loc]][1]) + "," \
             + str(az_campgrounds[az_campgrounds.keys()[loc]][0]) + "/"
     webbrowser.open_new_tab(url)
 
 # min_path, min_distance = compute_brute_path()
-start = 0
-matrix = campground_distances(az_campgrounds)
-min_path, min_distance = compute_approximate_path(matrix, start)
-print "solution"
-print min_path
-print min_distance
-show_path(min_path)
+# start = 0
+# matrix = campground_distances(az_campgrounds)
+# min_path, min_distance = compute_approximate_path(matrix, start)
+# print "solution"
+# print min_path
+# print min_distance
+# show_path(min_path)
